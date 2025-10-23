@@ -1,6 +1,0 @@
-pandas
-numpy
-transfromers
-torch
-pytest
-flake8
