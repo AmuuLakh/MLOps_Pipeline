@@ -4,6 +4,7 @@ import pandas as pd
 import emoji
 import logging
 from data_extraction import load_data
+from transformers import AutoTokenizer
 
 logger = logging.getLogger('data_cleaning')
 if not logger.handlers:
@@ -84,8 +85,34 @@ def normalize_reviews(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def tokenization(df: pd.DataFrame) -> pd.DataFrame:
+    if 'clean_content' not in df.columns:
+        raise ValueError("Expected 'clean_content' column. Did you run normalize_reviews()?")
+
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+
+    logger.info("Starting tokenization...")
+
+    encoded = tokenizer(
+        df["clean_content"].tolist(),
+        padding="max_length",
+        truncation=True,
+        max_length=512,
+        return_attention_mask=True
+    )
+
+    df["input_ids"] = encoded["input_ids"]
+    df["attention_mask"] = encoded["attention_mask"]
+    df["token_length"] = df["input_ids"].apply(len)
+
+    logger.info("Tokenization complete.")
+    return df
+
+
 if __name__ == "__main__":
     data = load_data()
     if data is not None:
         cleaned = normalize_reviews(data)
-        print(cleaned[['content', 'clean_content']].head())
+        tokenized = tokenization(cleaned)
+        tokenized.to_csv("data/processed/tokenized_data.csv", index=False)
+        print(tokenized.head())

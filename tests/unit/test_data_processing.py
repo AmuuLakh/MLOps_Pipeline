@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
-from data_processing import load_data, clean_text, normalize_reviews
+from data_processing import load_data, clean_text, normalize_reviews, tokenization
 
 def test_clean_text_with_real_data():
     """Test text cleaning using actual loaded dataset content."""
@@ -43,3 +43,48 @@ def test_normalize_reviews_no_content_column(caplog):
 
     assert "clean_content" not in cleaned.columns
     assert any("'content' column not found" in msg for msg in caplog.text.splitlines())
+
+
+def test_tokenization_adds_columns():
+    """Ensure tokenization adds input_ids, attention_mask, and token_length columns."""
+    df = pd.DataFrame({"clean_content": ["hello world"]})
+    result = tokenization(df)
+
+    assert "input_ids" in result.columns, "input_ids column missing"
+    assert "attention_mask" in result.columns, "attention_mask column missing"
+    assert "token_length" in result.columns, "token_length column missing"
+
+    # Single row checks
+    assert isinstance(result.loc[0, "input_ids"], list)
+    assert isinstance(result.loc[0, "attention_mask"], list)
+    assert result.loc[0, "token_length"] == len(result.loc[0, "input_ids"])
+
+
+def test_tokenization_padding_and_mask():
+    """Test correct padding behavior and matching attention mask."""
+    df = pd.DataFrame({"clean_content": ["hello world"]})
+    result = tokenization(df)
+
+    input_ids = result.loc[0, "input_ids"]
+    attention_mask = result.loc[0, "attention_mask"]
+
+    # Length must be max_length (512)
+    assert len(input_ids) == 512
+    assert len(attention_mask) == 512
+
+    # First padding index
+    pad_index = input_ids.index(0)  # 0 = pad token ID for BERT-uncased
+
+    # Check masks before and after padding
+    assert all(m == 1 for m in attention_mask[:pad_index])
+    assert all(m == 0 for m in attention_mask[pad_index:])
+
+
+def test_tokenization_missing_clean_content():
+    """Tokenization should raise an error when clean_content column is missing."""
+    df = pd.DataFrame({"content": ["missing clean column"]})
+
+    with pytest.raises(ValueError) as exc_info:
+        tokenization(df)
+
+    assert "clean_content" in str(exc_info.value)
