@@ -5,7 +5,9 @@ import emoji
 import logging
 from data_extraction import load_data
 from transformers import AutoTokenizer
+from sklearn.model_selection import train_test_split
 
+# ---------------- Logging Configuration ----------------
 logger = logging.getLogger('data_cleaning')
 if not logger.handlers:
     logger.setLevel(logging.INFO)
@@ -17,7 +19,7 @@ if not logger.handlers:
     logger.addHandler(sh)
     logger.addHandler(fh)
 
-
+# ---------------- Text Cleaning ----------------
 def clean_text(text: str) -> str:
     """
     Clean and normalize raw text by:
@@ -68,7 +70,7 @@ def clean_text(text: str) -> str:
 
     return text
 
-
+# ---------------- Normalization ---------------
 def normalize_reviews(df: pd.DataFrame) -> pd.DataFrame:
     """
     Apply text cleaning to the 'content' column of the DataFrame.
@@ -84,7 +86,7 @@ def normalize_reviews(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
-
+# ---------------- Tokenization ----------------
 def tokenization(df: pd.DataFrame) -> pd.DataFrame:
     if 'clean_content' not in df.columns:
         raise ValueError("Expected 'clean_content' column. Did you run normalize_reviews()?")
@@ -108,11 +110,26 @@ def tokenization(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Tokenization complete.")
     return df
 
+# ---------------- Data Splitting ----------------
+def split_dataset(df: pd.DataFrame, test_size: float = 0.2, random_state: int = 42):
+    """Split data into train and validation sets."""
+    logger.info(f"Splitting dataset into {int((1-test_size)*100)}/{int(test_size*100)} train/validation...")
+    train_df, eval_df = train_test_split(df, test_size=test_size, random_state=random_state, shuffle=True)
+    logger.info(f"Train size: {len(train_df)}, Validation size: {len(eval_df)}")
+    return train_df, eval_df
+
 
 if __name__ == "__main__":
     data = load_data()
     if data is not None:
         cleaned = normalize_reviews(data)
         tokenized = tokenization(cleaned)
-        tokenized.to_csv("data/processed/tokenized_data.csv", index=False)
-        print(tokenized.head())
+
+        train_dataset, eval_dataset = split_dataset(tokenized)
+
+        train_dataset.to_csv("data/processed/train_tokenized.csv", index=False)
+        eval_dataset.to_csv("data/processed/eval_tokenized.csv", index=False)
+
+        logger.info("Saved tokenized train and eval datasets.")
+        print("✅ Data processing complete. Files saved to data/processed/")
+        print(f"Train: {len(train_dataset)} rows | Eval: {len(eval_dataset)} rows")
