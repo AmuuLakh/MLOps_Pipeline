@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from transformers import BertForSequenceClassification, AutoTokenizer
 from datasets import Dataset
+from sklearn.metrics import accuracy_score, f1_score
 import sys
 import os
 
@@ -236,6 +237,225 @@ class TestModelWithRealTokenizer:
         assert all(0 <= p < 3 for p in predictions.tolist())
         
         print("✓ Model with tokenized text test passed")
+
+
+# ============================================================================
+# NEW TESTS: Dummy Batch Inference with Accuracy & F1-Score
+# ============================================================================
+
+class TestDummyBatchInference:
+    """Test suite for dummy batch inference with metrics evaluation"""
+    
+    def test_run_dummy_batch_inference(self):
+        """Run dummy batch inference and verify output shape"""
+        # Load model and tokenizer
+        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        model = BertForSequenceClassification.from_pretrained(
+            "distilbert-base-uncased", 
+            num_labels=3
+        )
+        model.eval()
+        
+        # Create dummy text batch
+        dummy_texts = [
+            "This product is amazing and works perfectly!",
+            "Average quality, nothing special about it.",
+            "Terrible experience, completely disappointed.",
+            "Great value for money, highly recommend.",
+            "Not good at all, waste of money.",
+            "It's okay, meets basic expectations.",
+            "Absolutely love it, exceeded expectations!",
+            "Below average, would not buy again."
+        ]
+        
+        # Tokenize the batch
+        inputs = tokenizer(
+            dummy_texts,
+            padding=True,
+            truncation=True,
+            max_length=128,
+            return_tensors="pt"
+        )
+        
+        # Run inference
+        with torch.no_grad():
+            outputs = model(**inputs)
+        
+        logits = outputs.logits
+        
+        # Verify output shape
+        expected_batch_size = len(dummy_texts)
+        expected_num_labels = 3
+        assert logits.shape == (expected_batch_size, expected_num_labels), \
+            f"Expected shape ({expected_batch_size}, {expected_num_labels}), got {logits.shape}"
+        
+        # Verify logits are valid
+        assert torch.all(torch.isfinite(logits)), "Logits contain NaN or Inf values"
+        
+        print(f"✓ Dummy batch inference successful")
+        print(f"  Batch size: {expected_batch_size}")
+        print(f"  Output shape: {logits.shape}")
+    
+    def test_compare_predictions_to_expected_shape(self):
+        """Compare predictions to expected shape across different batch sizes"""
+        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        model = BertForSequenceClassification.from_pretrained(
+            "distilbert-base-uncased", 
+            num_labels=3
+        )
+        model.eval()
+        
+        # Test multiple batch sizes
+        batch_sizes = [1, 4, 8, 16, 32]
+        num_labels = 3
+        
+        for batch_size in batch_sizes:
+            # Create dummy batch
+            dummy_texts = [f"Sample text number {i}." for i in range(batch_size)]
+            
+            # Tokenize
+            inputs = tokenizer(
+                dummy_texts,
+                padding=True,
+                truncation=True,
+                max_length=128,
+                return_tensors="pt"
+            )
+            
+            # Run inference
+            with torch.no_grad():
+                outputs = model(**inputs)
+            
+            logits = outputs.logits
+            predictions = torch.argmax(logits, dim=-1)
+            
+            # Verify logits shape
+            expected_logits_shape = (batch_size, num_labels)
+            assert logits.shape == expected_logits_shape, \
+                f"Batch size {batch_size}: Expected logits shape {expected_logits_shape}, got {logits.shape}"
+            
+            # Verify predictions shape
+            expected_predictions_shape = (batch_size,)
+            assert predictions.shape == expected_predictions_shape, \
+                f"Batch size {batch_size}: Expected predictions shape {expected_predictions_shape}, got {predictions.shape}"
+            
+            # Verify all predictions are valid class indices
+            assert torch.all((predictions >= 0) & (predictions < num_labels)), \
+                f"Batch size {batch_size}: Invalid prediction values"
+            
+            print(f"✓ Batch size {batch_size}: Shapes verified")
+        
+        print(f"✓ All batch sizes passed shape comparison test")
+    
+    def test_evaluate_accuracy_and_f1_score(self):
+        """Evaluate accuracy and F1-score on dummy labeled data"""
+        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        model = BertForSequenceClassification.from_pretrained(
+            "distilbert-base-uncased", 
+            num_labels=3
+        )
+        model.eval()
+        
+        # Create dummy labeled data
+        # Labels: 0=negative, 1=neutral, 2=positive
+        dummy_data = [
+            ("This is absolutely terrible and awful!", 0),
+            ("It's okay, nothing special.", 1),
+            ("Amazing and wonderful experience!", 2),
+            ("Worst product ever made.", 0),
+            ("Average quality and performance.", 1),
+            ("Fantastic, highly recommended!", 2),
+            ("Horrible waste of money.", 0),
+            ("Decent but not great.", 1),
+            ("Outstanding and excellent!", 2),
+            ("Very disappointed with this.", 0),
+            ("It works as expected.", 1),
+            ("Love it so much!", 2)
+        ]
+        
+        texts = [item[0] for item in dummy_data]
+        true_labels = torch.tensor([item[1] for item in dummy_data])
+        
+        # Tokenize
+        inputs = tokenizer(
+            texts,
+            padding=True,
+            truncation=True,
+            max_length=128,
+            return_tensors="pt"
+        )
+        
+        # Run inference
+        with torch.no_grad():
+            outputs = model(**inputs)
+        
+        logits = outputs.logits
+        predicted_labels = torch.argmax(logits, dim=-1)
+        
+        # Convert to numpy for sklearn metrics
+        true_labels_np = true_labels.numpy()
+        predicted_labels_np = predicted_labels.numpy()
+        
+        # Calculate accuracy
+        accuracy = accuracy_score(true_labels_np, predicted_labels_np)
+        
+        # Calculate F1-score (weighted average for multiclass)
+        f1_weighted = f1_score(true_labels_np, predicted_labels_np, average='weighted')
+        f1_macro = f1_score(true_labels_np, predicted_labels_np, average='macro')
+        
+        # Verify metrics are in valid range
+        assert 0.0 <= accuracy <= 1.0, f"Accuracy {accuracy} is out of range [0, 1]"
+        assert 0.0 <= f1_weighted <= 1.0, f"F1-weighted {f1_weighted} is out of range [0, 1]"
+        assert 0.0 <= f1_macro <= 1.0, f"F1-macro {f1_macro} is out of range [0, 1]"
+        
+        print(f"✓ Metrics evaluation completed:")
+        print(f"  Accuracy: {accuracy:.4f}")
+        print(f"  F1-Score (weighted): {f1_weighted:.4f}")
+        print(f"  F1-Score (macro): {f1_macro:.4f}")
+        print(f"\n  True labels:      {true_labels_np.tolist()}")
+        print(f"  Predicted labels: {predicted_labels_np.tolist()}")
+        
+        # Calculate per-class metrics
+        for label in range(3):
+            mask = true_labels_np == label
+            if mask.sum() > 0:
+                class_accuracy = (predicted_labels_np[mask] == label).sum() / mask.sum()
+                print(f"  Class {label} accuracy: {class_accuracy:.4f}")
+    
+    def test_batch_inference_consistency(self):
+        """Test that batch inference produces consistent results"""
+        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        model = BertForSequenceClassification.from_pretrained(
+            "distilbert-base-uncased", 
+            num_labels=3
+        )
+        model.eval()
+        
+        text = "This is a test sentence for consistency."
+        
+        # Run inference multiple times
+        results = []
+        for _ in range(3):
+            inputs = tokenizer(
+                [text],
+                padding=True,
+                truncation=True,
+                max_length=128,
+                return_tensors="pt"
+            )
+            
+            with torch.no_grad():
+                outputs = model(**inputs)
+            
+            prediction = torch.argmax(outputs.logits, dim=-1).item()
+            results.append(prediction)
+        
+        # All predictions should be identical
+        assert all(pred == results[0] for pred in results), \
+            f"Inconsistent predictions: {results}"
+        
+        print(f"✓ Batch inference consistency verified")
+        print(f"  Predictions: {results}")
 
 
 # Run all tests if executed directly
