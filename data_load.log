@@ -1,0 +1,34 @@
+2025-10-23 15:09:30,795 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-1\test_missing_file_returns_none0\no_such_file.csv
+2025-10-23 15:09:30,808 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-1\test_empty_file_returns_none0\empty.csv is empty.
+2025-10-23 15:42:25,028 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-2\test_missing_file_returns_none0\no_such_file.csv
+2025-10-23 15:42:25,043 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-2\test_empty_file_returns_none0\empty.csv is empty.
+2025-10-23 15:43:36,147 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-3\test_missing_file_returns_none0\no_such_file.csv
+2025-10-23 15:43:36,161 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-3\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 09:50:06,981 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-0\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 09:50:07,021 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-0\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 09:52:55,504 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-1\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 09:52:55,534 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-1\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 09:54:39,870 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-2\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 09:54:39,884 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-2\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 09:56:55,014 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-3\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 09:56:55,033 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-3\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 09:59:04,249 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-4\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 09:59:04,269 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-4\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:01:06,733 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-5\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:01:06,780 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-5\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:02:22,025 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-6\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:02:22,054 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-6\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:04:06,440 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-7\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:04:06,458 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-7\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:05:49,681 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-8\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:05:49,695 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-8\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:09:57,486 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-9\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:09:57,503 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-9\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:12:10,061 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-10\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:12:10,100 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-10\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:13:13,215 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-11\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:13:13,226 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-11\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:22:08,818 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-12\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:22:08,839 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-12\test_empty_file_returns_none0\empty.csv is empty.
+2025-11-06 10:24:48,851 - WARNING - File not found: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-13\test_missing_file_returns_none0\no_such_file.csv
+2025-11-06 10:24:48,869 - WARNING - No data: C:\Users\benza\AppData\Local\Temp\pytest-of-benza\pytest-13\test_empty_file_returns_none0\empty.csv is empty.
