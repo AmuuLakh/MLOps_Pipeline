@@ -174,3 +174,7 @@ pip install -r requirements.txt
 ```
 
 Python 3.12+ is recommended.
+
+---
+**Done by Amisha & Melek & Ariel**
+
