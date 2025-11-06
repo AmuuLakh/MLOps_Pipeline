@@ -1,0 +1,84 @@
+2025-11-06 09:50:14,690 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 09:53:03,703 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 09:54:47,935 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 09:57:03,484 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 09:59:11,510 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:01:15,633 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:02:30,863 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:04:13,630 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:06:00,884 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:10:06,894 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:12:20,409 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:13:24,127 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:22:18,055 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
+2025-11-06 10:24:58,557 - INFO - Label distribution:
+label
+2    5654
+0    4850
+1    1991
+Name: count, dtype: int64
