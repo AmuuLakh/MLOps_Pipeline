@@ -26,7 +26,7 @@ project/
 │  ├─ data_processing.py        # Cleans and normalizes textual reviews
 │  ├─ model.py                  # Fine-tunes BERT
 │  ├─ inference.py              # Predicts sentiment on new text
-│  ├─ data/
+│  └─ data/
 │     ├─ processed/
 │     │   ├─ eval_tokenized.csv     # evaluation data file
 │     │   └─ train_tokenized.csv    # training data file
