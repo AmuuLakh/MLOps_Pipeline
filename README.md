@@ -29,7 +29,7 @@ project/
 │  ├─ data/
 │     ├─ processed/
 │     │   ├─ eval_tokenized.csv     # evaluation data file
-      │   └─ train_tokenized.csv    # training data file
+│     │   └─ train_tokenized.csv    # training data file
 │     └─ dataset.csv           # Source data file
 └─ tests/
     └─ unit/
