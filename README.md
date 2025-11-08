@@ -124,11 +124,11 @@ pytest -v
 | `test_inference.py` | Validates prediction logic and output labels |
 
 Test output:
-```
+
 ![WhatsApp Image 2025-11-06 at 10 25 44_5efd1871](https://github.com/user-attachments/assets/2594b600-a150-486e-be90-186b47c92f3e)
 ![WhatsApp Image 2025-11-06 at 10 26 07_fb74316f](https://github.com/user-attachments/assets/6c5ebd5d-a563-4870-9e16-a938e16d80ec)
 
-```
+
 
 ---
 
