@@ -40,11 +40,6 @@ jobs:
         black --check .
       continue-on-error: true
     
-    - name: Check import sorting with isort
-      run: |
-        isort --check-only .
-      continue-on-error: true
-    
     - name: Install Git LFS & Pull Weights
       run: |
         git lfs install
