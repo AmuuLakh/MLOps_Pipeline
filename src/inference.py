@@ -55,6 +55,10 @@ def predict_sentiment(text: str):
     with torch.no_grad():
         outputs = model(**inputs)
         probs = F.softmax(outputs.logits, dim=-1).flatten()
+    
+    # Hard override: short factual sentences → Neutral
+    if len(text.split()) <= 5:
+        return "Neutral"
 
     label_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
 
@@ -66,12 +70,9 @@ def predict_sentiment(text: str):
     # Get max probability and corresponding label
     max_prob = max(neg_prob, neu_prob, pos_prob)
 
-  # Low-confidence → classify as Neutral
-    if max_prob < 0.45:
-        return "Neutral"
-
-    # If Neutral is close to the top class → allow it
-    if neu_prob >= max_prob - 0.05:
+    # If confidence is low (max prob < 0.5), default to Neutral
+    # This helps with ambiguous or truly neutral text
+    if max_prob < 0.5:
         return "Neutral"
 
     # Otherwise return the class with highest probability
