@@ -19,7 +19,7 @@ def get_model():
                 f"Model directory not found at {MODEL_DIR}. "
                 "Please ensure the model is trained and saved first."
             )
-        _model = BertForSequenceClassification.from_pretrained(MODEL_DIR, state_dict=torch.load(f"{MODEL_DIR}/model.safetensors"))
+        _model = BertForSequenceClassification.from_pretrained(MODEL_DIR)
         _model.eval()  # Set to evaluation mode
     return _model
 
