@@ -3,8 +3,8 @@ import torch
 import torch.nn.functional as F
 import os
 
-# Get absolute path to the saved_model directory (next to this file)
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "saved_model")
+# Get absolute path to the model directory (next to this file)
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "model")
 
 print("Loading model and tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
