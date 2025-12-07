@@ -45,10 +45,11 @@ jobs:
         isort --check-only .
       continue-on-error: true
     
-    - name: Install Git LFS
+    - name: Install Git LFS & Pull Weights
       run: |
         git lfs install
         git lfs pull
+        ls -R src/model
 
     - name: Run unit tests
       run: |
