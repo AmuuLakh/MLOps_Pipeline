@@ -2,7 +2,7 @@ import os
 
 import torch
 import torch.nn.functional as F
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import BertForSequenceClassification, AutoTokenizer
 
 # Get absolute path to the model directory (next to this file)
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "model")
@@ -19,7 +19,7 @@ def get_model():
                 f"Model directory not found at {MODEL_DIR}. "
                 "Please ensure the model is trained and saved first."
             )
-        _model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+        _model = BertForSequenceClassification.from_pretrained(MODEL_DIR)
         _model.eval()  # Set to evaluation mode
     return _model
 
