@@ -68,7 +68,7 @@ def predict_sentiment(text: str):
 
     # If confidence is low (max prob < 0.5), default to Neutral
     # This helps with ambiguous or truly neutral text
-    if abs(neu_prob - max_prob) < 0.1:
+    if max_prob < 0.6:
         return "Neutral"
 
     # Otherwise return the class with highest probability
