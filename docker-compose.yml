@@ -11,7 +11,6 @@ services:
       - sentiment_processed:/app/src/data/processed
     depends_on:
       - db
-      - redis
     networks:
       - sentiment_net
 
