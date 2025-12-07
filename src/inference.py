@@ -19,9 +19,7 @@ def get_model():
                 f"Model directory not found at {MODEL_DIR}. "
                 "Please ensure the model is trained and saved first."
             )
-        _model = BertForSequenceClassification.from_pretrained(
-            MODEL_DIR, variant="pytorch_model"
-        )
+        _model = BertForSequenceClassification.from_pretrained(MODEL_DIR, use_safetensors=True)
         _model.eval()  # Set to evaluation mode
     return _model
 
@@ -35,7 +33,7 @@ def get_tokenizer():
                 f"Model directory not found at {MODEL_DIR}. "
                 "Please ensure the model is trained and saved first."
             )
-        _tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR, variant="tokenizer")
+        _tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR, use_safetensors=True)
     return _tokenizer
 
 
