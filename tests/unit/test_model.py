@@ -7,10 +7,20 @@ from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score
 import sys
 import os
+from unittest.mock import patch, MagicMock
 
 # Add src directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
+@pytest.fixture(autouse=True)
+def mock_dependencies():
+    """Mock heavy dependencies"""
+    with patch('src.model.AutoModelForSequenceClassification'), \
+         patch('src.model.AutoTokenizer'), \
+         patch('src.model.Trainer'), \
+         patch('src.model.Dataset'):
+        yield
+        
 from model import compute_metrics, prepare_datasets
 
 

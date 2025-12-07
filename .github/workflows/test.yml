@@ -24,6 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov flake8 black isort
+        # Fix pyarrow compatibility issue
+        pip install --upgrade pyarrow
     
     - name: Lint with flake8
       run: |
@@ -45,6 +47,15 @@ jobs:
     - name: Run unit tests
       run: |
         pytest tests/unit/ -v --cov=src --cov-report=xml --cov-report=term
+      env:
+        # Set environment variable to skip model loading in tests if needed
+        TESTING: true
+    
+    - name: Run integration tests
+      run: |
+        pytest tests/integration/ -v
+      continue-on-error: true
+      if: hashFiles('tests/integration/') != ''
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v3
