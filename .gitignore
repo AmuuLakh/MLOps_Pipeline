@@ -224,7 +224,6 @@ saved_model.zip
 *.pth
 *.bin
 *.ckpt
-*.safetensors
 *.pt
 *.h5
 *.keras

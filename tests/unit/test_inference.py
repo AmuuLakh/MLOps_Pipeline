@@ -2,22 +2,10 @@ import pytest
 from inference import predict_sentiment
 import sys
 import os
-from unittest.mock import patch, MagicMock
 
 # Add src directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
-@pytest.fixture(autouse=True)
-def mock_model_loading():
-    """Mock model and tokenizer loading for all tests"""
-    with patch('src.inference.AutoModelForSequenceClassification') as mock_model, \
-         patch('src.inference.AutoTokenizer') as mock_tokenizer:
-        
-        # Setup mock returns
-        mock_model.from_pretrained.return_value = MagicMock()
-        mock_tokenizer.from_pretrained.return_value = MagicMock()
-        
-        yield mock_model, mock_tokenizer
 
 # --- Basic Smoke Tests ---
 def test_model_load_and_predict():
