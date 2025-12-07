@@ -2,7 +2,7 @@ import os
 
 import torch
 import torch.nn.functional as F
-from transformers import BertForSequenceClassification, AutoTokenizer
+from transformers import AutoTokenizer, BertForSequenceClassification
 
 # Get absolute path to the model directory (next to this file)
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "model")
