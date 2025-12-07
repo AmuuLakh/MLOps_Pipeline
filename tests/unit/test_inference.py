@@ -1,10 +1,14 @@
-import pytest
-from inference import predict_sentiment
-import sys
 import os
+import sys
+
+import pytest
+
+from inference import predict_sentiment
 
 # Add src directory to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src"))
+)
 
 
 # --- Basic Smoke Tests ---
@@ -12,7 +16,12 @@ def test_model_load_and_predict():
     """Ensure model loads and returns a valid sentiment label."""
     text = "I love this movie!"
     result = predict_sentiment(text)
-    assert result in ["Positive", "Negative", "Neutral"], "Invalid sentiment label returned"
+    assert result in [
+        "Positive",
+        "Negative",
+        "Neutral",
+    ], "Invalid sentiment label returned"
+
 
 # --- Positive Sentiment Test ---
 def test_positive_sentiment():
@@ -21,12 +30,14 @@ def test_positive_sentiment():
     positive_texts = [
         "This product is absolutely amazing and I love it!",
         "Best experience ever! Highly recommend!",
-        "Wonderful, fantastic, excellent service!"
+        "Wonderful, fantastic, excellent service!",
     ]
     results = [predict_sentiment(text) for text in positive_texts]
     # At least 2 out of 3 should be positive (allowing for model uncertainty)
     positive_count = results.count("Positive")
-    assert positive_count >= 2, f"Expected at least 2 Positive results but got {positive_count}: {results}"
+    assert (
+        positive_count >= 2
+    ), f"Expected at least 2 Positive results but got {positive_count}: {results}"
 
 
 # --- Negative Sentiment Test ---
@@ -36,12 +47,14 @@ def test_negative_sentiment():
     negative_texts = [
         "This was the worst experience of my life.",
         "Terrible, horrible, absolutely awful!",
-        "I hate this product, complete waste of money."
+        "I hate this product, complete waste of money.",
     ]
     results = [predict_sentiment(text) for text in negative_texts]
     # At least 2 out of 3 should be negative (allowing for model uncertainty)
     negative_count = results.count("Negative")
-    assert negative_count >= 2, f"Expected at least 2 Negative results but got {negative_count}: {results}"
+    assert (
+        negative_count >= 2
+    ), f"Expected at least 2 Negative results but got {negative_count}: {results}"
 
 
 # --- Neutral Sentiment Test ---
@@ -59,12 +72,14 @@ def test_neutral_sentiment():
         "There are five items.",
         "The sky exists.",
         "Objects have properties.",
-        "Time passes."
+        "Time passes.",
     ]
     results = [predict_sentiment(text) for text in neutral_texts]
     neutral_count = results.count("Neutral")
-    
-    assert neutral_count >= 1, f"Model never predicts Neutral (got {neutral_count} out of {len(neutral_texts)}): {results}"
+
+    assert (
+        neutral_count >= 1
+    ), f"Model never predicts Neutral (got {neutral_count} out of {len(neutral_texts)}): {results}"
 
 
 # --- Edge Case Test ---
@@ -74,6 +89,7 @@ def test_empty_input():
     result = predict_sentiment(text)
     assert isinstance(result, str), "Output should be a string"
     assert result == "Neutral", "Empty input should return Neutral"
+
 
 # --- Consistency Test ---
 def test_prediction_consistency():

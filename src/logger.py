@@ -1,5 +1,6 @@
 from src.db import get_db_connection
 
+
 def log_sentiment(input_text: str, sentiment: str):
     try:
         conn = get_db_connection()

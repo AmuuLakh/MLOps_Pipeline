@@ -1,15 +1,41 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import os
+
 import torch
 import torch.nn.functional as F
-import os
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 # Get absolute path to the model directory (next to this file)
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "model")
+_model = None
+_tokenizer = None
 
-print("Loading model and tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
-model.eval()
+
+def get_model():
+    """Lazy load model"""
+    global _model
+    if _model is None:
+        if not os.path.exists(MODEL_DIR):
+            raise FileNotFoundError(
+                f"Model directory not found at {MODEL_DIR}. "
+                "Please ensure the model is trained and saved first."
+            )
+        _model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+        _model.eval()  # Set to evaluation mode
+    return _model
+
+
+def get_tokenizer():
+    """Lazy load tokenizer"""
+    global _tokenizer
+    if _tokenizer is None:
+        if not os.path.exists(MODEL_DIR):
+            raise FileNotFoundError(
+                f"Model directory not found at {MODEL_DIR}. "
+                "Please ensure the model is trained and saved first."
+            )
+        _tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    return _tokenizer
+
 
 # Define the prediction function
 def predict_sentiment(text: str):
@@ -17,8 +43,11 @@ def predict_sentiment(text: str):
     Predict sentiment for a given input text.
     Returns: str -> "Positive", "Negative", or "Neutral"
     """
-    if not text.strip():
+    if not text or not text.strip():
         return "Neutral"
+
+    model = get_model()
+    tokenizer = get_tokenizer()
 
     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
     with torch.no_grad():
@@ -26,7 +55,7 @@ def predict_sentiment(text: str):
         probs = F.softmax(outputs.logits, dim=-1).flatten()
 
     label_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
-    
+
     # Extract individual class probabilities
     neg_prob = probs[0].item()
     neu_prob = probs[1].item()
@@ -34,12 +63,12 @@ def predict_sentiment(text: str):
 
     # Get max probability and corresponding label
     max_prob = max(neg_prob, neu_prob, pos_prob)
-    
+
     # If confidence is low (max prob < 0.5), default to Neutral
     # This helps with ambiguous or truly neutral text
     if max_prob < 0.5:
         return "Neutral"
-    
+
     # Otherwise return the class with highest probability
     if max_prob == pos_prob:
         return "Positive"
@@ -47,6 +76,7 @@ def predict_sentiment(text: str):
         return "Negative"
     else:
         return "Neutral"
+
 
 # Example usage
 if __name__ == "__main__":

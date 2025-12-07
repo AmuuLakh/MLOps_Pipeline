@@ -1,6 +1,8 @@
 import os
 import sys
+
 import pandas as pd
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
 from data_extraction import load_data
 
@@ -10,6 +12,7 @@ def test_missing_file_returns_none(tmp_path):
     result = load_data(str(missing))
     assert result is None
 
+
 def test_load_valid_csv(tmp_path):
     p = tmp_path / "valid.csv"
     p.write_text("a,b\n1,2\n3,4", encoding="utf-8")
@@ -18,11 +21,13 @@ def test_load_valid_csv(tmp_path):
     assert tuple(df.shape) == (2, 2)
     assert list(df.columns) == ["a", "b"]
 
+
 def test_empty_file_returns_none(tmp_path):
     p = tmp_path / "empty.csv"
     p.write_text("", encoding="utf-8")
     df = load_data(str(p))
     assert df is None
+
 
 def test_semicolon_delimiter_detection(tmp_path):
     p = tmp_path / "semi.csv"
@@ -31,6 +36,7 @@ def test_semicolon_delimiter_detection(tmp_path):
     assert df is not None
     assert tuple(df.shape) == (2, 2)
     assert list(df.columns) == ["col1", "col2"]
+
 
 def test_encoding_fallback(monkeypatch, tmp_path):
     p = tmp_path / "latin1.csv"
@@ -50,6 +56,7 @@ def test_encoding_fallback(monkeypatch, tmp_path):
         assert list(df.columns) == ["cafe"]
     finally:
         monkeypatch.setattr(pd, "read_csv", original_read_csv)
+
 
 def test_parser_error_fallback(monkeypatch, tmp_path):
     p = tmp_path / "weird_delim.csv"

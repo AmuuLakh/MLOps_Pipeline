@@ -1,30 +1,29 @@
-import torch
-import numpy as np
-import pandas as pd
-from datasets import Dataset
-from transformers import (
-    BertForSequenceClassification,
-    Trainer,
-    TrainingArguments,
-    AutoTokenizer,
-)
-from sklearn.metrics import accuracy_score, f1_score
-from data_processing import split_dataset, normalize_reviews, tokenization
-from data_extraction import load_data
 import logging
 import os
 
+import numpy as np
+import pandas as pd
+import torch
+from datasets import Dataset
+from sklearn.metrics import accuracy_score, f1_score
+from transformers import (AutoTokenizer, BertForSequenceClassification,
+                          Trainer, TrainingArguments)
+
+from data_extraction import load_data
+from data_processing import normalize_reviews, split_dataset, tokenization
+
 # ---------------- Logging Configuration ----------------
-logger = logging.getLogger('model_training')
+logger = logging.getLogger("model_training")
 if not logger.handlers:
     logger.setLevel(logging.INFO)
-    fmt = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    fmt = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     sh = logging.StreamHandler()
     sh.setFormatter(fmt)
-    fh = logging.FileHandler('model_training.log', encoding='utf-8')
+    fh = logging.FileHandler("model_training.log", encoding="utf-8")
     fh.setFormatter(fmt)
     logger.addHandler(sh)
     logger.addHandler(fh)
+
 
 # ---------------- Metric Function ----------------
 def compute_metrics(eval_pred):
@@ -35,6 +34,7 @@ def compute_metrics(eval_pred):
     f1 = f1_score(labels, preds, average="weighted")
     return {"accuracy": acc, "f1": f1}
 
+
 # ---------------- Load and Prepare Data ----------------
 def prepare_datasets():
     df = load_data()
@@ -43,11 +43,11 @@ def prepare_datasets():
         return None, None
 
     # Use existing 'content' column for text
-    if 'content' not in df.columns or 'score' not in df.columns:
+    if "content" not in df.columns or "score" not in df.columns:
         raise ValueError("Dataset must have 'content' and 'score' columns.")
-    
+
     # Convert score (1–5) into sentiment label (0=neg, 1=neutral, 2=pos)
-    df['label'] = df['score'].apply(lambda x: 0 if x <= 2 else (1 if x == 3 else 2))
+    df["label"] = df["score"].apply(lambda x: 0 if x <= 2 else (1 if x == 3 else 2))
 
     logger.info(f"Label distribution:\n{df['label'].value_counts()}")
 
@@ -59,6 +59,7 @@ def prepare_datasets():
     train_df, eval_df = split_dataset(df)
 
     from datasets import Dataset
+
     train_dataset = Dataset.from_pandas(train_df)
     eval_dataset = Dataset.from_pandas(eval_df)
 
@@ -75,7 +76,9 @@ def train_model():
 
     # Load tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-    model = BertForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=3)
+    model = BertForSequenceClassification.from_pretrained(
+        "distilbert-base-uncased", num_labels=3
+    )
 
     # Define training arguments
     training_args = TrainingArguments(
@@ -118,4 +121,3 @@ def train_model():
     model.save_pretrained(save_dir)
     tokenizer.save_pretrained(save_dir)
     logger.info(f"Model and tokenizer saved to {save_dir}")
-
