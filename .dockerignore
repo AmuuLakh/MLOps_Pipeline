@@ -1,0 +1,143 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+docs/
+*.pdf
+
+# Python cache and compiled files
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+
+# Virtual environments
+.env
+.envrc
+.venv
+.project1
+env/
+venv/
+ENV/
+project1/
+env.bak/
+venv.bak/
+project1.bak/
+
+# IDE and editor files
+.vscode/
+.idea/
+.spyderproject
+.spyproject
+.ropeproject
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+tests/
+test_*.py
+*_test.py
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+wheels/
+*.whl
+
+# Logs
+*.log
+logs/
+data_cleaning.log
+data_load.log
+
+# Model files (large files - should be downloaded or mounted)
+saved_model/
+saved_model.zip
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+*.pt
+*.h5
+*.keras
+
+# Cache directories
+.cache/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+transformers_cache/
+.cache/huggingface/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3-journal
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Large data files (mount as volumes instead)
+src/data/processed/*.csv
+data/raw/*.csv
+data/external/*.csv
+
+# Docker files (don't need in the image)
+Dockerfile
+.dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose*.yml
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Package manager files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment variables (should be passed at runtime)
+.env*
+!.env.example
+
+# Backup files
+*.bak
+*.backup
+*~

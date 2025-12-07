@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  sentiment_app:
+    build: .
+    container_name: sentiment_app
+    volumes:
+      - sentiment_models:/app/src/model
+      - sentiment_dataset:/app/src/data
+      - sentiment_processed:/app/src/data/processed
+    command: [ "python", "cli.py", "--text", "Hello world" ]
+
+volumes:
+  sentiment_models:
+  sentiment_dataset:
+  sentiment_processed:
