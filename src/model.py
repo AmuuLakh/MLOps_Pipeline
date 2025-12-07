@@ -6,12 +6,8 @@ import pandas as pd
 import torch
 from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score
-from transformers import (
-    AutoTokenizer,
-    BertForSequenceClassification,
-    Trainer,
-    TrainingArguments,
-)
+from transformers import (AutoTokenizer, BertForSequenceClassification,
+                          Trainer, TrainingArguments)
 
 from data_extraction import load_data
 from data_processing import normalize_reviews, split_dataset, tokenization

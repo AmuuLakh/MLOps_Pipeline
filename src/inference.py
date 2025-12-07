@@ -19,7 +19,9 @@ def get_model():
                 f"Model directory not found at {MODEL_DIR}. "
                 "Please ensure the model is trained and saved first."
             )
-        _model = BertForSequenceClassification.from_pretrained(MODEL_DIR, use_safetensors=True)
+        _model = BertForSequenceClassification.from_pretrained(
+            MODEL_DIR, use_safetensors=True
+        )
         _model.eval()  # Set to evaluation mode
     return _model
 
@@ -66,7 +68,7 @@ def predict_sentiment(text: str):
 
     # If confidence is low (max prob < 0.5), default to Neutral
     # This helps with ambiguous or truly neutral text
-    if max_prob < 0.5:
+    if abs(neu_prob - max_prob) < 0.1:
         return "Neutral"
 
     # Otherwise return the class with highest probability

@@ -5,7 +5,8 @@ import pandas as pd
 import pytest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
-from data_processing import clean_text, load_data, normalize_reviews, tokenization
+from data_processing import (clean_text, load_data, normalize_reviews,
+                             tokenization)
 
 
 def test_clean_text_with_real_data():
