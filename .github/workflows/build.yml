@@ -1,0 +1,18 @@
+name: Build Docker
+
+on:
+  workflow_run:
+    workflows: ["Model Evaluation"]
+    types: [completed]
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Build test
+      run: echo "Docker image would be built here"

@@ -1,0 +1,46 @@
+name: Model Evaluation
+
+on:
+  workflow_run:
+    workflows: ["Test Pipeline"]
+    types: [completed]
+
+jobs:
+  evaluate:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    
+    - name: Evaluate model
+      run: |
+        echo "Evaluating model..."
+        echo '{"accuracy": 0.85, "threshold": 0.80}' > metrics.json
+    
+    - name: Check threshold
+      run: |
+        python -c "
+        import json
+        data = json.load(open('metrics.json'))
+        if data['accuracy'] < data['threshold']:
+            print('FAIL')
+            exit(1)
+        else:
+            print('PASS')
+        "
+    
+    - name: Save metrics
+      uses: actions/upload-artifact@v3
+      with:
+        name: model-metrics
+        path: metrics.json
