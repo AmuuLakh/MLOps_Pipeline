@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS sentiment_logs (
+    id SERIAL PRIMARY KEY,
+    input_text TEXT NOT NULL,
+    sentiment VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

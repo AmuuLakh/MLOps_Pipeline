@@ -1,35 +1,39 @@
-import pytest
-import pandas as pd
 import os
 import sys
+
+import pandas as pd
+import pytest
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
-from data_processing import load_data, clean_text, normalize_reviews, tokenization
+from data_processing import clean_text, load_data, normalize_reviews, tokenization
+
 
 def test_clean_text_with_real_data():
     """Test text cleaning using actual loaded dataset content."""
     df = load_data()  # Load your CSV dataset
     assert df is not None, "Dataset could not be loaded."
-    assert 'content' in df.columns, "'content' column missing in dataset."
+    assert "content" in df.columns, "'content' column missing in dataset."
 
     # Take a sample of reviews (avoid running on full dataset for speed)
-    sample_texts = df['content'].dropna().head(5).tolist()
+    sample_texts = df["content"].dropna().head(5).tolist()
     cleaned_texts = [clean_text(text) for text in sample_texts]
 
     # Verify outputs are lowercase and cleaned
     for original, cleaned in zip(sample_texts, cleaned_texts):
         assert isinstance(cleaned, str)
         assert cleaned == cleaned.lower(), f"Text not lowercased: {cleaned}"
-        assert not any(c in cleaned for c in ['!', '?', ',', '.', ';', ':']), f"Text not cleaned: {cleaned}"
+        assert not any(
+            c in cleaned for c in ["!", "?", ",", ".", ";", ":"]
+        ), f"Text not cleaned: {cleaned}"
 
     # Log or print first example for visual verification
     print("Example:", sample_texts[0], "→", cleaned_texts[0])
 
 
 def test_normalize_reviews_creates_clean_column():
-    data = pd.DataFrame({
-        "reviewId": [1, 2],
-        "content": ["It’s Great!", "I can’t believe it works!!!"]
-    })
+    data = pd.DataFrame(
+        {"reviewId": [1, 2], "content": ["It’s Great!", "I can’t believe it works!!!"]}
+    )
     cleaned = normalize_reviews(data)
     assert "clean_content" in cleaned.columns
     assert cleaned.loc[0, "clean_content"] == "its great"

@@ -1,0 +1,41 @@
+version: "3.12"
+
+services:
+  api:
+    build: .
+    container_name: sentiment_api
+    command: ["python", "cli.py", "--text", "Hello world"]
+    volumes:
+      - sentiment_models:/app/src/model
+      - sentiment_dataset:/app/src/data
+      - sentiment_processed:/app/src/data/processed
+    depends_on:
+      - db
+    networks:
+      - sentiment_net
+
+  db:
+    image: postgres:15
+    container_name: sentiment_db
+    restart: always
+    environment:
+      POSTGRES_USER: mlops
+      POSTGRES_PASSWORD: mlops123
+      POSTGRES_DB: sentiment_logs
+    volumes:
+      - sentiment_db:/var/lib/postgresql/data
+      - ./src/db_schema.sql:/docker-entrypoint-initdb.d/db_schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - sentiment_net
+
+networks:
+  sentiment_net:
+    driver: bridge
+
+volumes:
+  sentiment_models:
+  sentiment_dataset:
+  sentiment_processed:
+  sentiment_db:

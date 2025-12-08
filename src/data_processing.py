@@ -1,23 +1,26 @@
 # data_processing.py
-import re
-import pandas as pd
-import emoji
 import logging
-from data_extraction import load_data
-from transformers import AutoTokenizer
+import re
+
+import emoji
+import pandas as pd
 from sklearn.model_selection import train_test_split
+from transformers import AutoTokenizer
+
+from data_extraction import load_data
 
 # ---------------- Logging Configuration ----------------
-logger = logging.getLogger('data_cleaning')
+logger = logging.getLogger("data_cleaning")
 if not logger.handlers:
     logger.setLevel(logging.INFO)
-    fmt = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    fmt = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     sh = logging.StreamHandler()
     sh.setFormatter(fmt)
-    fh = logging.FileHandler('data_cleaning.log', encoding='utf-8')
+    fh = logging.FileHandler("data_cleaning.log", encoding="utf-8")
     fh.setFormatter(fmt)
     logger.addHandler(sh)
     logger.addHandler(fh)
+
 
 # ---------------- Text Cleaning ----------------
 def clean_text(text: str) -> str:
@@ -27,16 +30,16 @@ def clean_text(text: str) -> str:
       - Removing punctuation, symbols, and extra spaces
       - Handling emojis
       - Expanding contractions (optional simple handling)
-    
+
     Args:
         text: The input review text
-    
+
     Returns:
         Cleaned text string
     """
     if not isinstance(text, str):
         return ""
-    
+
     # Convert to lowercase
     text = text.lower()
 
@@ -70,26 +73,30 @@ def clean_text(text: str) -> str:
 
     return text
 
+
 # ---------------- Normalization ---------------
 def normalize_reviews(df: pd.DataFrame) -> pd.DataFrame:
     """
     Apply text cleaning to the 'content' column of the DataFrame.
     Logs progress and returns a new DataFrame with cleaned text.
     """
-    if 'content' not in df.columns:
+    if "content" not in df.columns:
         logger.error("'content' column not found in DataFrame.")
         return df
-    
+
     logger.info("Starting text normalization on 'content' column...")
-    df['clean_content'] = df['content'].apply(clean_text)
+    df["clean_content"] = df["content"].apply(clean_text)
     logger.info("Text normalization complete.")
-    
+
     return df
+
 
 # ---------------- Tokenization ----------------
 def tokenization(df: pd.DataFrame) -> pd.DataFrame:
-    if 'clean_content' not in df.columns:
-        raise ValueError("Expected 'clean_content' column. Did you run normalize_reviews()?")
+    if "clean_content" not in df.columns:
+        raise ValueError(
+            "Expected 'clean_content' column. Did you run normalize_reviews()?"
+        )
 
     tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 
@@ -100,7 +107,7 @@ def tokenization(df: pd.DataFrame) -> pd.DataFrame:
         padding="max_length",
         truncation=True,
         max_length=512,
-        return_attention_mask=True
+        return_attention_mask=True,
     )
 
     df["input_ids"] = encoded["input_ids"]
@@ -110,11 +117,16 @@ def tokenization(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Tokenization complete.")
     return df
 
+
 # ---------------- Data Splitting ----------------
 def split_dataset(df: pd.DataFrame, test_size: float = 0.2, random_state: int = 42):
     """Split data into train and validation sets."""
-    logger.info(f"Splitting dataset into {int((1-test_size)*100)}/{int(test_size*100)} train/validation...")
-    train_df, eval_df = train_test_split(df, test_size=test_size, random_state=random_state, shuffle=True)
+    logger.info(
+        f"Splitting dataset into {int((1-test_size)*100)}/{int(test_size*100)} train/validation..."
+    )
+    train_df, eval_df = train_test_split(
+        df, test_size=test_size, random_state=random_state, shuffle=True
+    )
     logger.info(f"Train size: {len(train_df)}, Validation size: {len(eval_df)}")
     return train_df, eval_df
 
