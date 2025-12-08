@@ -55,10 +55,6 @@ def predict_sentiment(text: str):
     with torch.no_grad():
         outputs = model(**inputs)
         probs = F.softmax(outputs.logits, dim=-1).flatten()
-    
-    # Hard override: short factual sentences → Neutral
-    if len(text.split()) <= 5:
-        return "Neutral"
 
     label_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
 
