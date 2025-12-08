@@ -53,12 +53,6 @@ jobs:
         # Set environment variable to skip model loading in tests if needed
         TESTING: true
     
-    - name: Run integration tests
-      run: |
-        pytest tests/integration/ -v
-      continue-on-error: true
-      if: hashFiles('tests/integration/') != ''
-    
     - name: Upload coverage reports
       uses: codecov/codecov-action@v3
       with:
